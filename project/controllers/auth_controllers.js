@@ -1,4 +1,4 @@
-const UserModel = require("../models/user/user_model");
+const UserModel = require("../models/user_model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
     if (!(username && password)) {
       return res.status(400).json({
         response: [],
-        error: "Input required",
+        error: "input required",
       });
     }
     var _user = await UserModel.findOne({ username: username });
@@ -16,6 +16,7 @@ exports.login = async (req, res) => {
       if (await bcrypt.compare(password, _user.password)) {
         const token = jwt.sign(
           {
+            user_id: _user.user_id,
             user_name: _user.user_name,
             user_nickname: _user.user_nickname,
             user_telnum: _user.user_telnum,
@@ -24,16 +25,19 @@ exports.login = async (req, res) => {
           },
           process.env.JWT_SECRET,
           {
-            expiresIn: "1d",
+            expiresIn: "7d",
           }
         );
         return res.json({
-          response: [token],
+          response: [{ token: token }],
           error: "",
         });
       }
     }
-    return res.json("Not Pass");
+    return res.json({
+      response: [],
+      error: "username or password is invalid",
+    });
   } catch (err) {
     res.json({
       response: [],
