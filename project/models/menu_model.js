@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
+const categories = require("./category_model");
+const options = require("./option_model");
 
 const menuSchema = mongoose.Schema({
   menu_id: {
@@ -31,18 +34,21 @@ const menuSchema = mongoose.Schema({
     require: true,
   },
   category_id: {
-    type: String,
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: categories,
+      },
+    ],
     require: true,
   },
   menu_option: {
     type: [
       {
-        option_id: {
-          type: String,
-        },
+        type: Schema.Types.ObjectId,
+        ref: options,
       },
     ],
-    require: true,
   },
 });
 
