@@ -17,6 +17,22 @@ exports.get_category = async (req, res) => {
     });
   }
 };
+exports.getone_category = async (req, res) => {
+  try {
+    const { category_id } = req.params;
+    await CategoryModel.findOne({ category_id }).then((data) => {
+      res.status(200).json({
+        response: [data],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 
 // PROTECTED
 exports.create_category = async (req, res) => {
