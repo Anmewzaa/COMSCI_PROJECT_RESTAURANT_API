@@ -43,6 +43,7 @@ exports.create_zone = async (req, res) => {
 };
 exports.update_zone = async (req, res) => {
   try {
+    const { zone_id } = req.params;
     const { zone_name } = req.body;
     if (!zone_name) {
       return res.status(400).json({
@@ -50,7 +51,6 @@ exports.update_zone = async (req, res) => {
         error: "input required",
       });
     }
-    const { zone_id } = req.params;
     await ZoneModel.findOneAndUpdate(
       { zone_id: zone_id },
       { zone_name: zone_name }
