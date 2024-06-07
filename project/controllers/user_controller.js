@@ -1,23 +1,14 @@
 const { v4: uuidv4 } = require("uuid");
 const UserModel = require("../models/user_model");
+const AccountModel = require("../models/account_model");
 const bcrypt = require("bcryptjs");
 
-//
-exports.get = async (req, res) => {
+// PROTECTED
+exports.get_user = async (req, res) => {
   try {
     await UserModel.find({}).then((data) => {
-      const filteredData = data.map((item) => {
-        return {
-          user_id: item.user_id,
-          user_name: item.user_name,
-          user_nickname: item.user_nickname,
-          user_telnum: item.user_telnum,
-          user_role: item.user_role,
-          user_access_rights: item.user_access_rights,
-        };
-      });
       res.json({
-        response: [filteredData],
+        response: [data],
         error: "",
       });
     });
@@ -28,27 +19,42 @@ exports.get = async (req, res) => {
     });
   }
 };
-//
-exports.create = async (req, res) => {
+exports.getone_user = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    await UserModel.findOne({ user_id: user_id }).then((data) => {
+      res.json({
+        response: [data],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.create_user = async (req, res) => {
   try {
     const {
-      user_name,
+      user_fullname,
       user_nickname,
       user_telnum,
       user_role,
       user_access_rights,
-      username,
-      password,
+      account_username,
+      account_password,
     } = req.body;
     if (
       !(
-        user_name &&
+        user_fullname &&
         user_nickname &&
         user_telnum &&
         user_role &&
         user_access_rights &&
-        username &&
-        password
+        account_username &&
+        account_password
       )
     ) {
       return res.status(400).json({
@@ -57,20 +63,25 @@ exports.create = async (req, res) => {
       });
     }
     const salt = await bcrypt.genSalt(10);
-    const hashpassword = await bcrypt.hash(password, salt);
+    const hashpassword = await bcrypt.hash(account_password, salt);
+    const uuid = await uuidv4();
     await UserModel.create({
-      user_id: uuidv4(),
-      user_name: user_name,
+      user_id: uuid,
+      user_fullname: user_fullname,
       user_nickname: user_nickname,
       user_telnum: user_telnum,
       user_role: user_role,
       user_access_rights: user_access_rights,
-      username: username,
-      password: hashpassword,
     }).then(() => {
-      res.status(200).json({
-        response: [{ message: "create user success" }],
-        error: "",
+      AccountModel.create({
+        user_id: uuid,
+        account_username: account_username,
+        account_password: hashpassword,
+      }).then(() => {
+        res.status(200).json({
+          response: [{ message: "create user success" }],
+          error: "",
+        });
       });
     });
   } catch (err) {
@@ -80,12 +91,11 @@ exports.create = async (req, res) => {
     });
   }
 };
-//
-exports.update = async (req, res) => {
+exports.update_user = async (req, res) => {
   try {
     const { user_id } = req.params;
     const {
-      user_name,
+      user_fullname,
       user_nickname,
       user_telnum,
       user_role,
@@ -93,7 +103,7 @@ exports.update = async (req, res) => {
     } = req.body;
     if (
       !(
-        user_name &&
+        user_fullname &&
         user_nickname &&
         user_telnum &&
         user_role &&
@@ -108,7 +118,7 @@ exports.update = async (req, res) => {
     await UserModel.findOneAndUpdate(
       { user_id: user_id },
       {
-        user_name: user_name,
+        user_fullname: user_fullname,
         user_nickname: user_nickname,
         user_telnum: user_telnum,
         user_role: user_role,
@@ -118,6 +128,24 @@ exports.update = async (req, res) => {
       res.status(200).json({
         response: [{ message: "update user success" }],
         err: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.delete_user = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    await UserModel.findOneAndDelete({ user_id: user_id }).then(() => {
+      AccountModel.findOneAndDelete({ user_id: user_id }).then(() => {
+        res.status(200).json({
+          response: [{ message: "delete user success" }],
+          err: "",
+        });
       });
     });
   } catch (err) {
