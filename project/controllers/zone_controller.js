@@ -17,6 +17,22 @@ exports.get_zone = async (req, res) => {
     });
   }
 };
+exports.getone_zone = async (req, res) => {
+  try {
+    const { zone_id } = req.params;
+    await ZoneModel.findOne({ zone_id: zone_id }).then((data) => {
+      res.json({
+        response: [data],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 exports.create_zone = async (req, res) => {
   try {
     const { zone_name } = req.body;
