@@ -17,6 +17,22 @@ exports.get_option = async (req, res) => {
     });
   }
 };
+exports.getone_option = async (req, res) => {
+  try {
+    const { option_id } = req.params;
+    await OptionModel.findOne({ option_id }).then((data) => {
+      res.status(200).json({
+        response: [data],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 
 // PROTECTED
 exports.create_option = async (req, res) => {
@@ -36,6 +52,46 @@ exports.create_option = async (req, res) => {
     }).then(() => {
       res.status(200).json({
         response: [{ message: "create option success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.update_option = async (req, res) => {
+  try {
+    const { option_id } = req.params;
+    const { option_name_th, option_name_en, sub_option } = req.body;
+    await OptionModel.findOneAndUpdate(
+      { option_id: option_id },
+      {
+        option_name_th: option_name_th,
+        option_name_en: option_name_en,
+        sub_option: sub_option,
+      }
+    ).then(() => {
+      res.json({
+        response: [{ message: "update option success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.delete_option = async (req, res) => {
+  try {
+    const { option_id } = req.params;
+    await OptionModel.findOneAndDelete({ option_id: option_id }).then(() => {
+      res.json({
+        response: [{ message: "delete option success" }],
         error: "",
       });
     });
