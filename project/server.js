@@ -28,6 +28,7 @@ app.use(
   require("./routes/category_route/unprotected_category_route")
 );
 app.use("/menu", require("./routes/menu_route/unprotected_menu"));
+
 // protected
 app.use(
   "/user",
@@ -43,6 +44,16 @@ app.use(
   "/category",
   passport.authenticate("jwt", { session: false }),
   require("./routes/category_route/protected_category_route")
+);
+app.use(
+  "/menu",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/menu_route/protected_menu")
+);
+app.use(
+  "/zone",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/zone_route")
 );
 
 const port = process.env.PORT;
