@@ -10,7 +10,7 @@ exports.get_category = async (req, res) => {
         error: "",
       });
     });
-  } catch (eerr) {
+  } catch (err) {
     res.json({
       response: [],
       error: `${err}`,
@@ -54,6 +54,50 @@ exports.create_category = async (req, res) => {
         error: "",
       });
     });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.update_category = async (req, res) => {
+  try {
+    const { category_id } = req.params;
+    const { category_name_th, category_name_en } = req.body;
+    if (!(category_name_th && category_name_en)) {
+      return res.status(400).json({
+        response: [],
+        error: "input required",
+      });
+    }
+    await CategoryModel.findOneAndUpdate(
+      { category_id: category_id },
+      { category_name_th: category_name_th, category_name_en: category_name_en }
+    ).then(() => {
+      res.json({
+        response: [{ message: "update category success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.delete_category = async (req, res) => {
+  try {
+    const { category_id } = req.params;
+    await CategoryModel.findOneAndDelete({ category_id: category_id }).then(
+      () => {
+        res.json({
+          response: [{ message: "delete category success" }],
+          error: "",
+        });
+      }
+    );
   } catch (err) {
     res.json({
       response: [],
