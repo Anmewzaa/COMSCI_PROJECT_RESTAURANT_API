@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
     require: true,
     unique: true,
   },
-  user_name: {
+  user_fullname: {
     type: String,
     require: true,
   },
@@ -23,14 +23,6 @@ const userSchema = mongoose.Schema({
     require: true,
   },
   user_access_rights: {
-    type: String,
-    require: true,
-  },
-  username: {
-    type: String,
-    require: true,
-  },
-  password: {
     type: String,
     require: true,
   },
