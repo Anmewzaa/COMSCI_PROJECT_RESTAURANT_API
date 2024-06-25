@@ -37,8 +37,8 @@ exports.getone_category = async (req, res) => {
 // PROTECTED
 exports.create_category = async (req, res) => {
   try {
-    const { category_name_th, category_name_en } = req.body;
-    if (!(category_name_th && category_name_en)) {
+    const { category_name_thai, category_name_english } = req.body;
+    if (!(category_name_thai && category_name_english)) {
       return res.status(400).json({
         response: [],
         error: "input required",
@@ -46,10 +46,12 @@ exports.create_category = async (req, res) => {
     }
     await CategoryModel.create({
       category_id: uuidv4(),
-      category_name_th: category_name_th,
-      category_name_en: category_name_en,
+      category_name: {
+        thai: category_name_thai,
+        english: category_name_english,
+      },
     }).then(() => {
-      res.status(200).json({
+      res.status(201).json({
         response: [{ message: "create category success" }],
         error: "",
       });
@@ -64,18 +66,32 @@ exports.create_category = async (req, res) => {
 exports.update_category = async (req, res) => {
   try {
     const { category_id } = req.params;
-    const { category_name_th, category_name_en } = req.body;
-    if (!(category_name_th && category_name_en)) {
+    const { category_name_thai, category_name_english } = req.body;
+    if (!(category_name_thai && category_name_english)) {
       return res.status(400).json({
         response: [],
         error: "input required",
       });
     }
+    const check = await CategoryModel.findOne({
+      category_id: category_id,
+    });
+    if (!check) {
+      return res.status(400).json({
+        response: [],
+        error: "invalid category id",
+      });
+    }
     await CategoryModel.findOneAndUpdate(
       { category_id: category_id },
-      { category_name_th: category_name_th, category_name_en: category_name_en }
+      {
+        category_name: {
+          thai: category_name_thai,
+          english: category_name_english,
+        },
+      }
     ).then(() => {
-      res.json({
+      res.status(200).json({
         response: [{ message: "update category success" }],
         error: "",
       });
