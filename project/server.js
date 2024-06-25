@@ -20,6 +20,8 @@ mongoose
   .then(() => console.log(`Connected to database successfully`))
   .catch((err) => console.log(`Error : ${err}`));
 
+mongoose.set("debug", true);
+
 // unprotected
 app.use("/auth", require("./routes/auth_route"));
 app.use("/option", require("./routes/option_route/unportected_option_route"));
@@ -28,6 +30,7 @@ app.use(
   require("./routes/category_route/unprotected_category_route")
 );
 app.use("/menu", require("./routes/menu_route/unprotected_menu"));
+app.use("/table", require("./routes/table_route/unprotected_table"));
 
 // protected
 app.use(
@@ -54,6 +57,11 @@ app.use(
   "/zone",
   passport.authenticate("jwt", { session: false }),
   require("./routes/zone_route")
+);
+app.use(
+  "/table",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/table_route/protecred_table")
 );
 
 const port = process.env.PORT;
