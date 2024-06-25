@@ -37,8 +37,8 @@ exports.getone_option = async (req, res) => {
 // PROTECTED
 exports.create_option = async (req, res) => {
   try {
-    const { option_name_th, option_name_en, sub_option } = req.body;
-    if (!(option_name_th && option_name_en && sub_option.length !== 0)) {
+    const { option_name_thai, option_name_english, sub_option } = req.body;
+    if (!(option_name_thai && option_name_english && sub_option.length !== 0)) {
       return res.status(400).json({
         response: [],
         error: "input required",
@@ -46,8 +46,10 @@ exports.create_option = async (req, res) => {
     }
     await OptionModel.create({
       option_id: uuidv4(),
-      option_name_th: option_name_th,
-      option_name_en: option_name_en,
+      option_name: {
+        thai: option_name_thai,
+        english: option_name_english,
+      },
       sub_option: sub_option,
     }).then(() => {
       res.status(200).json({
@@ -65,12 +67,14 @@ exports.create_option = async (req, res) => {
 exports.update_option = async (req, res) => {
   try {
     const { option_id } = req.params;
-    const { option_name_th, option_name_en, sub_option } = req.body;
+    const { option_name_thai, option_name_english, sub_option } = req.body;
     await OptionModel.findOneAndUpdate(
       { option_id: option_id },
       {
-        option_name_th: option_name_th,
-        option_name_en: option_name_en,
+        option_name: {
+          thai: option_name_thai,
+          english: option_name_english,
+        },
         sub_option: sub_option,
       }
     ).then(() => {
