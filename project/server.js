@@ -22,6 +22,9 @@ mongoose
 
 mongoose.set("debug", true);
 
+app.get("/", (req, res) => {
+  res.json({ version: `${process.env.VERSION}` });
+});
 // unprotected
 app.use("/auth", require("./routes/auth_route"));
 app.use("/option", require("./routes/option_route/unportected_option_route"));

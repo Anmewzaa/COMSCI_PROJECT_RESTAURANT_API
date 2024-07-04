@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    build: ./project
+    environment:
+      - VERSION=0.1
+      - PORT=8080
+      - DATABASE=mongodb+srv://Admin:ew57vO7hfmFNIrmC@database.k2xppu7.mongodb.net/?retryWrites=true&w=majority&appName=Database
+      - JWT_SECRET=Punyakon3
+    ports:
+      - "8080:8080"
+    command: npm run start
