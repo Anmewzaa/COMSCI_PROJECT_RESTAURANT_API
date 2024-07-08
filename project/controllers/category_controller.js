@@ -6,7 +6,7 @@ exports.get_category = async (req, res) => {
   try {
     await CategoryModel.find({}).then((data) => {
       res.status(200).json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
