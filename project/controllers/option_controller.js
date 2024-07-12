@@ -6,7 +6,7 @@ exports.get_option = async (req, res) => {
   try {
     await OptionModel.find({}).then((data) => {
       res.status(200).json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
@@ -22,7 +22,7 @@ exports.getone_option = async (req, res) => {
     const { option_id } = req.params;
     await OptionModel.findOne({ option_id }).then((data) => {
       res.status(200).json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
