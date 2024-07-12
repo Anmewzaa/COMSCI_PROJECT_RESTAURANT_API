@@ -22,7 +22,7 @@ exports.getone_category = async (req, res) => {
     const { category_id } = req.params;
     await CategoryModel.findOne({ category_id }).then((data) => {
       res.status(200).json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
