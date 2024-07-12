@@ -10,7 +10,7 @@ exports.get_menu = async (req, res) => {
       .populate("menu_option_id")
       .then((data) => {
         res.status(200).json({
-          response: [data],
+          response: data,
           error: "",
         });
       });
@@ -29,7 +29,7 @@ exports.getone_menu = async (req, res) => {
       .populate("menu_option_id")
       .then((data) => {
         res.status(200).json({
-          response: [data],
+          response: data,
           error: "",
         });
       });
