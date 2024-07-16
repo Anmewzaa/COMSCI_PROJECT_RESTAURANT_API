@@ -85,6 +85,7 @@ exports.create_menu = async (req, res) => {
       menu_image: menu_image,
       menu_category_id: menu_category_id,
       menu_option_id: menu_option_id,
+      menu_status: false,
     }).then(() => {
       res.status(201).json({
         response: [{ message: "create menu success" }],
