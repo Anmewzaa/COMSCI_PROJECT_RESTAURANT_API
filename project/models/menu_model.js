@@ -57,6 +57,9 @@ const menuSchema = mongoose.Schema(
         },
       ],
     },
+    menu_status: {
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );
