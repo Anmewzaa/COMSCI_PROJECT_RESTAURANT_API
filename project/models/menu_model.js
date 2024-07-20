@@ -36,6 +36,10 @@ const menuSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    menu_cost: {
+      type: String,
+      require: true,
+    },
     menu_image: {
       type: String,
       require: true,
