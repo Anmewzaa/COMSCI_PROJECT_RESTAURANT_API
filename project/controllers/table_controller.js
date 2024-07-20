@@ -10,7 +10,27 @@ exports.get_table = async (req, res) => {
       .populate("table_order.menu")
       .then((data) => {
         res.status(200).json({
-          response: [data],
+          response: data,
+          error: "",
+        });
+      });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.getone_table = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await TableModel.findOne({ table_id: id })
+      .populate("table_zone")
+      .populate("table_employee")
+      .populate("table_order.menu")
+      .then((data) => {
+        res.status(200).json({
+          response: data,
           error: "",
         });
       });
