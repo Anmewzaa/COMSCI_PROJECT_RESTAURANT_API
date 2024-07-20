@@ -8,7 +8,7 @@ exports.get_user = async (req, res) => {
   try {
     await UserModel.find({}).then((data) => {
       res.json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
@@ -24,7 +24,7 @@ exports.getone_user = async (req, res) => {
     const { user_id } = req.params;
     await UserModel.findOne({ user_id: user_id }).then((data) => {
       res.json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
