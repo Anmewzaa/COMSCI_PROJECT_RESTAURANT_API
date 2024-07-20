@@ -50,6 +50,7 @@ exports.create_menu = async (req, res) => {
       menu_describe_thai,
       menu_describe_english,
       menu_price,
+      menu_cost,
       menu_category_id,
       menu_option_id,
     } = req.body;
@@ -59,6 +60,7 @@ exports.create_menu = async (req, res) => {
         menu_name_english &&
         menu_describe_thai &&
         menu_describe_english &&
+        menu_cost &&
         menu_price &&
         menu_category_id &&
         menu_option_id &&
@@ -82,6 +84,7 @@ exports.create_menu = async (req, res) => {
         english: menu_describe_english,
       },
       menu_price: menu_price,
+      menu_cost: menu_cost,
       menu_image: menu_image,
       menu_category_id: menu_category_id,
       menu_option_id: menu_option_id,
@@ -108,21 +111,22 @@ exports.update_menu = async (req, res) => {
       menu_describe_thai,
       menu_describe_english,
       menu_price,
+      menu_cost,
       menu_category_id,
       menu_option_id,
-    } = req.params;
+    } = req.body;
     if (
       !(
         menu_name_thai &&
         menu_name_english &&
         menu_describe_thai &&
         menu_describe_english &&
+        menu_cost &&
         menu_price &&
         menu_category_id &&
         menu_option_id
       )
     ) {
-      console.log(menu_name_thai);
       return res.json({
         response: [],
         error: "input required",
@@ -140,6 +144,7 @@ exports.update_menu = async (req, res) => {
           english: menu_describe_english,
         },
         menu_price: menu_price,
+        menu_cost: menu_cost,
         menu_category_id: menu_category_id,
         menu_option_id: menu_option_id,
       }
