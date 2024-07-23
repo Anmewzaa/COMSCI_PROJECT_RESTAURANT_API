@@ -127,11 +127,16 @@ exports.close_table = async (req, res) => {
   try {
     const { table_id } = req.params;
     var _table = await TableModel.findOne({ table_id: table_id });
-    console.log(_table);
     if (_table === null) {
       return res.status(400).json({
         response: [],
         error: `Invalid table number`,
+      });
+    }
+    if (_table.table_order.length !== 0) {
+      return res.status(400).json({
+        response: [],
+        error: `Table order must be empty`,
       });
     }
     await TableModel.findOneAndUpdate(
@@ -142,7 +147,12 @@ exports.close_table = async (req, res) => {
         table_customer_amount: "",
         table_order: [],
       }
-    );
+    ).then(() => {
+      res.status(200).json({
+        response: [{ message: "close table success" }],
+        error: "",
+      });
+    });
   } catch (err) {
     res.json({
       response: [],
