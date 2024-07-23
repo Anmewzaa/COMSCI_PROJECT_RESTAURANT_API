@@ -51,7 +51,7 @@ const tableSchema = mongoose.Schema(
             type: Schema.Types.ObjectId,
             ref: menus,
           },
-          amount: {
+          status: {
             type: String,
           },
           option: [],
