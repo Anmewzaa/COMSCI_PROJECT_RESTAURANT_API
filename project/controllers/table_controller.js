@@ -24,7 +24,7 @@ exports.get_table = async (req, res) => {
 exports.getone_table = async (req, res) => {
   try {
     const { id } = req.params;
-    await TableModel.findOne({ table_id: id })
+    await TableModel.findOne({ _id: id })
       .populate("table_zone")
       .populate("table_employee")
       .populate("table_order.menu")
@@ -41,7 +41,6 @@ exports.getone_table = async (req, res) => {
     });
   }
 };
-
 // PROTECTED
 exports.create_table = async (req, res) => {
   try {
@@ -60,7 +59,7 @@ exports.create_table = async (req, res) => {
       });
     }
     await TableModel.create({
-      table_id: uuidv4(),
+      table_id: "",
       table_number: table_number,
       table_seat: table_seat,
       table_zone: table_zone,
@@ -87,7 +86,7 @@ exports.create_table = async (req, res) => {
 };
 exports.open_table = async (req, res) => {
   try {
-    const { table_id } = req.params;
+    const { _id } = req.params;
     const { table_employee, table_customer_amount } = req.body;
     if (!(table_employee && table_customer_amount)) {
       return res.status(400).json({
@@ -95,8 +94,7 @@ exports.open_table = async (req, res) => {
         error: `Input required`,
       });
     }
-    var _table = await TableModel.findOne({ table_id: table_id });
-    console.log(_table);
+    var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
         response: [],
@@ -104,8 +102,9 @@ exports.open_table = async (req, res) => {
       });
     }
     await TableModel.findOneAndUpdate(
-      { table_id: table_id },
+      { _id: _id },
       {
+        table_id: uuidv4(),
         table_status: "open",
         table_employee: table_employee,
         table_customer_amount: table_customer_amount,
@@ -125,8 +124,8 @@ exports.open_table = async (req, res) => {
 };
 exports.close_table = async (req, res) => {
   try {
-    const { table_id } = req.params;
-    var _table = await TableModel.findOne({ table_id: table_id });
+    const { _id } = req.params;
+    var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
         response: [],
@@ -140,8 +139,9 @@ exports.close_table = async (req, res) => {
       });
     }
     await TableModel.findOneAndUpdate(
-      { table_id: table_id },
+      { _id: _id },
       {
+        table_id: "",
         table_status: "close",
         table_employee: [],
         table_customer_amount: "",
@@ -162,7 +162,7 @@ exports.close_table = async (req, res) => {
 };
 exports.add_order_table = async (req, res) => {
   try {
-    const { table_id } = req.params;
+    const { _id } = req.params;
     const { table_order } = req.body;
     if (!(table_order.length !== 0)) {
       return res.status(400).json({
@@ -170,7 +170,7 @@ exports.add_order_table = async (req, res) => {
         error: `Input required`,
       });
     }
-    var _table = await TableModel.findOne({ table_id: table_id });
+    var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
         response: [],
@@ -178,7 +178,7 @@ exports.add_order_table = async (req, res) => {
       });
     }
     await TableModel.findOneAndUpdate(
-      { table_id: table_id },
+      { _id: _id },
       {
         $push: { table_order: table_order },
       }
@@ -188,15 +188,6 @@ exports.add_order_table = async (req, res) => {
         error: "",
       });
     });
-  } catch (err) {
-    res.json({
-      response: [],
-      error: `${err}`,
-    });
-  }
-};
-exports.edit_order_table = async (req, res) => {
-  try {
   } catch (err) {
     res.json({
       response: [],
@@ -229,6 +220,34 @@ exports.remove_order_table = async (req, res) => {
     ).then(() => {
       res.status(200).json({
         response: [{ message: "remove order success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.change_status_order_table = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { order_id, new_status } = req.body;
+    var _table = await TableModel.findOne({ _id: _id });
+    if (_table === null) {
+      return res.status(400).json({
+        response: [],
+        error: `Invalid table number`,
+      });
+    }
+    await TableModel.findOneAndUpdate(
+      { _id: _id, "table_order._id": order_id },
+      { $set: { "table_order.$.status": new_status } },
+      { new: true }
+    ).then(() => {
+      res.status(200).json({
+        response: [{ message: "update order status success" }],
         error: "",
       });
     });
