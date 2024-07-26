@@ -132,12 +132,12 @@ exports.close_table = async (req, res) => {
         error: `Invalid table number`,
       });
     }
-    if (_table.table_order.length !== 0) {
-      return res.status(400).json({
-        response: [],
-        error: `Table order must be empty`,
-      });
-    }
+    // if (_table.table_order.length !== 0) {
+    //   return res.status(400).json({
+    //     response: [],
+    //     error: `Table order must be empty`,
+    //   });
+    // }
     await TableModel.findOneAndUpdate(
       { _id: _id },
       {
@@ -233,7 +233,7 @@ exports.remove_order_table = async (req, res) => {
 exports.change_status_order_table = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { order_id, new_status } = req.body;
+    const { order_ids, new_status } = req.body;
     var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
@@ -241,15 +241,18 @@ exports.change_status_order_table = async (req, res) => {
         error: `Invalid table number`,
       });
     }
-    await TableModel.findOneAndUpdate(
-      { _id: _id, "table_order._id": order_id },
-      { $set: { "table_order.$.status": new_status } },
-      { new: true }
-    ).then(() => {
-      res.status(200).json({
-        response: [{ message: "update order status success" }],
-        error: "",
-      });
+    await Promise.all(
+      order_ids.map((order_id) =>
+        TableModel.findOneAndUpdate(
+          { _id: _id, "table_order._id": order_id },
+          { $set: { "table_order.$.status": new_status } },
+          { new: true }
+        )
+      )
+    );
+    res.status(200).json({
+      response: [{ message: "update order status success" }],
+      error: "",
     });
   } catch (err) {
     res.json({
