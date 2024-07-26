@@ -52,7 +52,7 @@ const tableSchema = mongoose.Schema(
             ref: menus,
           },
           status: {
-            type: String,
+            type: Number,
           },
           option: [],
         },
