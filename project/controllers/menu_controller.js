@@ -24,6 +24,12 @@ exports.get_menu = async (req, res) => {
 exports.getone_menu = async (req, res) => {
   try {
     const { menu_id } = req.params;
+    if (!menu_id) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
     await MenuModel.findOne({ menu_id })
       .populate("menu_category_id")
       .populate("menu_option_id")
@@ -117,6 +123,7 @@ exports.update_menu = async (req, res) => {
     } = req.body;
     if (
       !(
+        menu_id &&
         menu_name_thai &&
         menu_name_english &&
         menu_describe_thai &&
