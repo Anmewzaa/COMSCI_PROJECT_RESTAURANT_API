@@ -140,6 +140,12 @@ exports.update_user = async (req, res) => {
 exports.delete_user = async (req, res) => {
   try {
     const { user_id } = req.params;
+    if (!user_id) {
+      return res.status(400).json({
+        response: [],
+        err: "input required",
+      });
+    }
     await UserModel.findOneAndDelete({ user_id: user_id }).then(() => {
       AccountModel.findOneAndDelete({ user_id: user_id }).then(() => {
         res.status(200).json({
