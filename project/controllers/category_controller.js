@@ -20,6 +20,12 @@ exports.get_category = async (req, res) => {
 exports.getone_category = async (req, res) => {
   try {
     const { category_id } = req.params;
+    if (!category_id) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
     await CategoryModel.findOne({ category_id }).then((data) => {
       res.status(200).json({
         response: data,
@@ -106,6 +112,12 @@ exports.update_category = async (req, res) => {
 exports.delete_category = async (req, res) => {
   try {
     const { category_id } = req.params;
+    if (!category_id) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
     await CategoryModel.findOneAndDelete({ category_id: category_id }).then(
       () => {
         res.json({
