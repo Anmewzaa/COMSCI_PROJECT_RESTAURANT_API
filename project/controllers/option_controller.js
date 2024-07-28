@@ -20,7 +20,7 @@ exports.get_option = async (req, res) => {
 exports.getone_option = async (req, res) => {
   try {
     const { option_id } = req.params;
-    await OptionModel.findOne({ option_id }).then((data) => {
+    await OptionModel.findOne({ option_id: option_id }).then((data) => {
       res.status(200).json({
         response: data,
         error: "",
@@ -68,6 +68,12 @@ exports.update_option = async (req, res) => {
   try {
     const { option_id } = req.params;
     const { option_name_thai, option_name_english, sub_option } = req.body;
+    if (option_id && option_name_thai && option_name_english && sub_option) {
+      return res.status(400).json({
+        response: [],
+        error: "input required",
+      });
+    }
     await OptionModel.findOneAndUpdate(
       { option_id: option_id },
       {
@@ -93,6 +99,12 @@ exports.update_option = async (req, res) => {
 exports.delete_option = async (req, res) => {
   try {
     const { option_id } = req.params;
+    if (!option_id) {
+      return res.status(400).json({
+        response: [],
+        error: "input required",
+      });
+    }
     await OptionModel.findOneAndDelete({ option_id: option_id }).then(() => {
       res.json({
         response: [{ message: "delete option success" }],
