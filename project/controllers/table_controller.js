@@ -132,12 +132,12 @@ exports.close_table = async (req, res) => {
         error: `Invalid table number`,
       });
     }
-    // if (_table.table_order.length !== 0) {
-    //   return res.status(400).json({
-    //     response: [],
-    //     error: `Table order must be empty`,
-    //   });
-    // }
+    if (_table.table_order.length !== 0) {
+      return res.status(400).json({
+        response: [],
+        error: `Table order must be empty`,
+      });
+    }
     await TableModel.findOneAndUpdate(
       { _id: _id },
       {
