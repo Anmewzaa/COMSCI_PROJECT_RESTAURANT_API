@@ -8,6 +8,7 @@ const {
   add_order_table,
   remove_order_table,
   change_status_order_table,
+  check_bill,
 } = require("../../controllers/table_controller");
 
 // POST
@@ -17,5 +18,6 @@ router.put("/close/:_id", close_table);
 router.put("/add/:_id", add_order_table);
 router.put("/delete/:table_id", remove_order_table);
 router.put("/change_status/:_id", change_status_order_table);
+router.put("/checkbill/:_id", check_bill);
 
 module.exports = router;
