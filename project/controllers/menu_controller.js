@@ -198,3 +198,23 @@ exports.delete_menu = async (req, res) => {
     });
   }
 };
+exports.change_status_menu = async (req, res) => {
+  try {
+    const { menu_id } = req.params;
+    const { status } = req.body;
+    await MenuModel.findOneAndUpdate(
+      { menu_id: menu_id },
+      { menu_status: status }
+    ).then(() => {
+      res.status(200).json({
+        response: [{ message: "update menu status success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
