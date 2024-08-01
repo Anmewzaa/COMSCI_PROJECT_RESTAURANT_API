@@ -261,3 +261,41 @@ exports.change_status_order_table = async (req, res) => {
     });
   }
 };
+exports.check_bill = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    var _table = await TableModel.findOne({ _id: _id });
+    if (_table === null) {
+      return res.status(400).json({
+        response: [],
+        error: `Invalid table number`,
+      });
+    }
+    if (_table.table_order.length === 0) {
+      return res.status(400).json({
+        response: [],
+        error: `Table order must be not empty`,
+      });
+    }
+    await TableModel.findOneAndUpdate(
+      { _id: _id },
+      {
+        table_id: "",
+        table_status: "close",
+        table_employee: [],
+        table_customer_amount: "",
+        table_order: [],
+      }
+    ).then(() => {
+      res.status(200).json({
+        response: [{ message: "close table success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
