@@ -64,6 +64,9 @@ const menuSchema = mongoose.Schema(
     menu_status: {
       type: Boolean,
     },
+    menu_ratings: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );

@@ -170,7 +170,7 @@ exports.add_order_table = async (req, res) => {
         error: `Input required`,
       });
     }
-    var _table = await TableModel.findOne({ _id: _id });
+    var _table = await TableModel.findOne({ table_id: _id });
     if (_table === null) {
       return res.status(400).json({
         response: [],
@@ -178,7 +178,7 @@ exports.add_order_table = async (req, res) => {
       });
     }
     await TableModel.findOneAndUpdate(
-      { _id: _id },
+      { table_id: _id },
       {
         $push: { table_order: table_order },
       }
