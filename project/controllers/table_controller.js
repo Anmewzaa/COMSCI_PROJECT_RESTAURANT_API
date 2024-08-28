@@ -84,6 +84,26 @@ exports.create_table = async (req, res) => {
     });
   }
 };
+exports.delete_table = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await TableModel.findOneAndDelete({ _id: id }).then(() => {
+      res.status(200).json({
+        response: [
+          {
+            message: "delete table success",
+          },
+        ],
+        error: ``,
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 exports.open_table = async (req, res) => {
   try {
     const { _id } = req.params;

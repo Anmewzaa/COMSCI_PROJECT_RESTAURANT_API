@@ -6,7 +6,7 @@ exports.get_zone = async (req, res) => {
   try {
     await ZoneModel.find({}).then((data) => {
       res.json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
@@ -22,7 +22,7 @@ exports.getone_zone = async (req, res) => {
     const { zone_id } = req.params;
     await ZoneModel.findOne({ zone_id: zone_id }).then((data) => {
       res.json({
-        response: [data],
+        response: data,
         error: "",
       });
     });
