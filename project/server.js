@@ -66,6 +66,11 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   require("./routes/table_route/protecred_table")
 );
+app.use(
+  "/shop",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/daily_route")
+);
 
 const port = process.env.PORT;
 app.listen(port, "0.0.0.0", () => {

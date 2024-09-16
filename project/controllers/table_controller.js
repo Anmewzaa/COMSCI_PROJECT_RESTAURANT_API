@@ -217,7 +217,7 @@ exports.add_order_table = async (req, res) => {
 };
 exports.remove_order_table = async (req, res) => {
   try {
-    const { table_id } = req.params;
+    const { _id } = req.params;
     const { id } = req.body;
     if (!id) {
       return res.status(400).json({
@@ -225,7 +225,7 @@ exports.remove_order_table = async (req, res) => {
         error: `Input required`,
       });
     }
-    var _table = await TableModel.findOne({ table_id: table_id });
+    var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
         response: [],
@@ -233,7 +233,7 @@ exports.remove_order_table = async (req, res) => {
       });
     }
     await TableModel.findOneAndUpdate(
-      { table_id: table_id },
+      { _id: _id },
       {
         $pull: { table_order: { _id: id } },
       }
@@ -270,6 +270,7 @@ exports.change_status_order_table = async (req, res) => {
         )
       )
     );
+
     res.status(200).json({
       response: [{ message: "update order status success" }],
       error: "",

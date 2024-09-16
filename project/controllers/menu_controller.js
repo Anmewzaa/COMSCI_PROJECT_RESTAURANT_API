@@ -219,3 +219,23 @@ exports.change_status_menu = async (req, res) => {
     });
   }
 };
+exports.add_ratings = async (req, res) => {
+  try {
+    const { menu_id } = req.params;
+    await MenuModel.findOneAndUpdate(
+      { menu_id, menu_id },
+      { $inc: { menu_ratings: 1 } },
+      { new: true }
+    ).then(() => {
+      res.status(200).json({
+        response: [{ message: "update menu ratings success" }],
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};

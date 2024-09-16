@@ -18,7 +18,7 @@ router.delete("/delete/:id", delete_table);
 router.put("/open/:_id", open_table);
 router.put("/close/:_id", close_table);
 router.put("/add/:_id", add_order_table);
-router.put("/delete/:table_id", remove_order_table);
+router.put("/delete/:_id", remove_order_table);
 router.put("/change_status/:_id", change_status_order_table);
 router.put("/checkbill/:_id", check_bill);
 
