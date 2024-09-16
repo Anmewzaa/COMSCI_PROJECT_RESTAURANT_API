@@ -23,7 +23,7 @@ mongoose
 mongoose.set("debug", true);
 
 app.get("/", (req, res) => {
-  res.json({ version: `${process.env.VERSION}` });
+  res.json({ Message: "HELLO WORLD !" });
 });
 // unprotected
 app.use("/auth", require("./routes/auth_route"));
