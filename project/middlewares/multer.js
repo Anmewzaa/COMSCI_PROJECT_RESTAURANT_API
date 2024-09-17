@@ -11,4 +11,5 @@ const storage = multer.diskStorage({
 });
 
 // EXPORT
-exports.upload = multer({ storage: storage }).single("menu_image");
+exports.upload_menu = multer({ storage: storage }).single("menu_image");
+exports.upload_category = multer({ storage: storage }).single("category_image");

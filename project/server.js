@@ -37,37 +37,37 @@ app.use("/table", require("./routes/table_route/unprotected_table"));
 
 // protected
 app.use(
-  "/user",
+  "/authen/user",
   passport.authenticate("jwt", { session: false }),
   require("./routes/user_route/user_route")
 );
 app.use(
-  "/option",
+  "/authen/option",
   passport.authenticate("jwt", { session: false }),
   require("./routes/option_route/protected_option_route")
 );
 app.use(
-  "/category",
+  "/authen/category",
   passport.authenticate("jwt", { session: false }),
   require("./routes/category_route/protected_category_route")
 );
 app.use(
-  "/menu",
+  "/authen/menu",
   passport.authenticate("jwt", { session: false }),
   require("./routes/menu_route/protected_menu")
 );
 app.use(
-  "/zone",
+  "/authen/zone",
   passport.authenticate("jwt", { session: false }),
   require("./routes/zone_route")
 );
 app.use(
-  "/table",
+  "/authen/table",
   passport.authenticate("jwt", { session: false }),
   require("./routes/table_route/protecred_table")
 );
 app.use(
-  "/shop",
+  "/authen/shop",
   passport.authenticate("jwt", { session: false }),
   require("./routes/daily_route")
 );

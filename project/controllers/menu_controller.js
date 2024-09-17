@@ -46,6 +46,31 @@ exports.getone_menu = async (req, res) => {
     });
   }
 };
+exports.get_menu_from_category = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    if (!_id) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
+    await MenuModel.find({ menu_category_id: _id })
+      .populate("menu_category_id")
+      .populate("menu_option_id")
+      .then((data) => {
+        res.status(200).json({
+          response: data,
+          error: "",
+        });
+      });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 
 // PROTECTED
 exports.create_menu = async (req, res) => {
@@ -95,7 +120,6 @@ exports.create_menu = async (req, res) => {
       menu_category_id: menu_category_id,
       menu_option_id: menu_option_id,
       menu_status: true,
-      menu_ratings: 0,
     }).then(() => {
       res.status(201).json({
         response: [{ message: "create menu success" }],
@@ -172,6 +196,12 @@ exports.update_menu = async (req, res) => {
 exports.delete_menu = async (req, res) => {
   try {
     const { menu_id } = req.params;
+    if (!menu_id) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
     const removed = await MenuModel.findOneAndDelete({ menu_id: menu_id });
     if (removed) {
       await fs.unlink("./images/" + removed.menu_image, (err) => {
@@ -203,32 +233,19 @@ exports.change_status_menu = async (req, res) => {
   try {
     const { menu_id } = req.params;
     const { status } = req.body;
+    if (!menu_id && status) {
+      return res.status(400).json({
+        response: "",
+        error: "input required",
+      });
+    }
     await MenuModel.findOneAndUpdate(
       { menu_id: menu_id },
-      { menu_status: status }
-    ).then(() => {
-      res.status(200).json({
-        response: [{ message: "update menu status success" }],
-        error: "",
-      });
-    });
-  } catch (err) {
-    res.json({
-      response: [],
-      error: `${err}`,
-    });
-  }
-};
-exports.add_ratings = async (req, res) => {
-  try {
-    const { menu_id } = req.params;
-    await MenuModel.findOneAndUpdate(
-      { menu_id, menu_id },
-      { $inc: { menu_ratings: 1 } },
+      { menu_status: status },
       { new: true }
     ).then(() => {
       res.status(200).json({
-        response: [{ message: "update menu ratings success" }],
+        response: [{ message: "update menu status success" }],
         error: "",
       });
     });

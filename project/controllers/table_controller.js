@@ -41,6 +41,7 @@ exports.getone_table = async (req, res) => {
     });
   }
 };
+
 // PROTECTED
 exports.create_table = async (req, res) => {
   try {

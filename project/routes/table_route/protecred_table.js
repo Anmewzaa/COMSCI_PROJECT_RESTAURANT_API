@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
+  get_table,
   create_table,
   delete_table,
   open_table,
@@ -12,14 +13,18 @@ const {
   check_bill,
 } = require("../../controllers/table_controller");
 
+// GET
+router.get("/get", get_table);
 // POST
 router.post("/create", create_table);
-router.delete("/delete/:id", delete_table);
+// PUT
 router.put("/open/:_id", open_table);
 router.put("/close/:_id", close_table);
 router.put("/add/:_id", add_order_table);
 router.put("/delete/:_id", remove_order_table);
 router.put("/change_status/:_id", change_status_order_table);
 router.put("/checkbill/:_id", check_bill);
+// DELETE
+router.delete("/delete/:id", delete_table);
 
 module.exports = router;
