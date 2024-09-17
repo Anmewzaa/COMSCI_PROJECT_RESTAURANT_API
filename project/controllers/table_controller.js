@@ -24,7 +24,7 @@ exports.get_table = async (req, res) => {
 exports.getone_table = async (req, res) => {
   try {
     const { id } = req.params;
-    await TableModel.findOne({ table_id: table_id })
+    await TableModel.findOne({ table_id: id })
       .populate("table_zone")
       .populate("table_employee")
       .populate("table_order.menu")
