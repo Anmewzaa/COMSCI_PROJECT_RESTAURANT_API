@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 app.use("/auth", require("./routes/auth_route"));
 app.use("/option", require("./routes/option_route/unportected_option_route"));
 app.use(
-  "/category",
+  "/categories",
   require("./routes/category_route/unprotected_category_route")
 );
 app.use("/menu", require("./routes/menu_route/unprotected_menu"));
@@ -47,7 +47,7 @@ app.use(
   require("./routes/option_route/protected_option_route")
 );
 app.use(
-  "/authen/category",
+  "/authen/categories",
   passport.authenticate("jwt", { session: false }),
   require("./routes/category_route/protected_category_route")
 );
