@@ -68,7 +68,7 @@ exports.update_option = async (req, res) => {
   try {
     const { option_id } = req.params;
     const { option_name_thai, option_name_english, sub_option } = req.body;
-    if (option_id && option_name_thai && option_name_english && sub_option) {
+    if (!(option_id && option_name_thai && option_name_english && sub_option)) {
       return res.status(400).json({
         response: [],
         error: "input required",
