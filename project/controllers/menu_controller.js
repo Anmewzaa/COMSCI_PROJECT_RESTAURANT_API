@@ -133,8 +133,6 @@ exports.create_menu = async (req, res) => {
       });
     });
   } catch (err) {
-    console.log("menu_category_id =", menu_category_id);
-    console.log("menu_option_id =", menu_option_id);
     res.json({
       response: [],
       error: `${err}`,
@@ -154,14 +152,6 @@ exports.update_menu = async (req, res) => {
       menu_category_id,
       menu_option_id,
     } = req.body;
-
-    if (typeof menu_category_id === "string") {
-      menu_category_id = [menu_category_id];
-    }
-    if (typeof menu_option_id === "string") {
-      menu_option_id = [menu_option_id];
-    }
-
     if (
       !(
         menu_id &&
@@ -180,6 +170,11 @@ exports.update_menu = async (req, res) => {
         error: "input required",
       });
     }
+    const optionIds = menu_option_id
+      ? Array.isArray(menu_option_id)
+        ? menu_option_id
+        : [menu_option_id]
+      : [];
     await MenuModel.findOneAndUpdate(
       { menu_id: menu_id },
       {
@@ -194,20 +189,16 @@ exports.update_menu = async (req, res) => {
         menu_price: menu_price,
         menu_cost: menu_cost,
         menu_category_id: menu_category_id,
-        menu_option_id: menu_option_id,
+        menu_option_id: optionIds,
       },
       { new: true }
     ).then(() => {
-      console.log("menu_category_id =", menu_category_id);
-      console.log("menu_option_id =", menu_option_id);
       res.status(200).json({
         response: [{ message: "update menu success" }],
         error: "",
       });
     });
   } catch (err) {
-    console.log("menu_category_id =", menu_category_id);
-    console.log("menu_option_id =", menu_option_id);
     res.json({
       response: [],
       error: `${err}`,
