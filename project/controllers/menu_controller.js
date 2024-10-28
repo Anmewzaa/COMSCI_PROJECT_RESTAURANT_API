@@ -85,7 +85,6 @@ exports.create_menu = async (req, res) => {
       menu_category_id,
       menu_option_id,
     } = req.body;
-    console.log("Request body:", req.body);
     if (
       !(
         menu_name_thai &&
@@ -152,6 +151,7 @@ exports.update_menu = async (req, res) => {
       menu_category_id,
       menu_option_id,
     } = req.body;
+    console.log("Request body:", req.body);
     if (
       !(
         menu_id &&
