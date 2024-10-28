@@ -146,6 +146,14 @@ exports.update_menu = async (req, res) => {
       menu_category_id,
       menu_option_id,
     } = req.body;
+
+    if (typeof menu_category_id === "string") {
+      menu_category_id = [menu_category_id];
+    }
+    if (typeof menu_option_id === "string") {
+      menu_option_id = [menu_option_id];
+    }
+
     if (
       !(
         menu_id &&
@@ -179,7 +187,8 @@ exports.update_menu = async (req, res) => {
         menu_cost: menu_cost,
         menu_category_id: menu_category_id,
         menu_option_id: menu_option_id,
-      }
+      },
+      { new: true }
     ).then(() => {
       res.status(200).json({
         response: [{ message: "update menu success" }],
