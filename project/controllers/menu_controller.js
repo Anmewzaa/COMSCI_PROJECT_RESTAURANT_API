@@ -155,8 +155,8 @@ exports.update_menu = async (req, res) => {
         menu_describe_english &&
         menu_cost &&
         menu_price &&
-        menu_category_id &&
-        menu_option_id
+        Array.isArray(menu_category_id) &&
+        Array.isArray(menu_option_id)
       )
     ) {
       return res.json({
