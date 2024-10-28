@@ -86,13 +86,6 @@ exports.create_menu = async (req, res) => {
       menu_option_id,
     } = req.body;
 
-    if (typeof menu_category_id === "string") {
-      menu_category_id = [menu_category_id];
-    }
-    if (typeof menu_option_id === "string") {
-      menu_option_id = [menu_option_id];
-    }
-
     if (
       !(
         menu_name_thai &&
@@ -101,8 +94,8 @@ exports.create_menu = async (req, res) => {
         menu_describe_english &&
         menu_cost &&
         menu_price &&
-        Array.isArray(menu_category_id) &&
-        Array.isArray(menu_option_id) &&
+        menu_category_id &&
+        menu_option_id &&
         req.file
       )
     ) {
@@ -111,6 +104,11 @@ exports.create_menu = async (req, res) => {
         error: "input required",
       });
     }
+    const optionIds = menu_option_id
+      ? Array.isArray(menu_option_id)
+        ? menu_option_id
+        : [menu_option_id]
+      : [];
     menu_image = req.file.filename;
     await MenuModel.create({
       menu_id: uuidv4(),
@@ -126,11 +124,9 @@ exports.create_menu = async (req, res) => {
       menu_cost: menu_cost,
       menu_image: menu_image,
       menu_category_id: menu_category_id,
-      menu_option_id: menu_option_id,
+      menu_option_id: optionIds,
       menu_status: true,
     }).then(() => {
-      console.log("menu_category_id =", menu_category_id);
-      console.log("menu_option_id =", menu_option_id);
       res.status(201).json({
         response: [{ message: "create menu success" }],
         error: "",
