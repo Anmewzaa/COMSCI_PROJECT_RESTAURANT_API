@@ -20,7 +20,7 @@ mongoose
   .then(() => console.log(`Connected to database successfully`))
   .catch((err) => console.log(`Error : ${err}`));
 
-mongoose.set("debug", true);
+// mongoose.set("debug", true);
 
 app.get("/", (req, res) => {
   res.json({ Message: "HELLO WORLD !" });
