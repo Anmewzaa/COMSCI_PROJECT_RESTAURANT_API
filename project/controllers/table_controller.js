@@ -60,7 +60,7 @@ exports.create_table = async (req, res) => {
       });
     }
     await TableModel.create({
-      table_id: "",
+      table_id: uuidv4(),
       table_number: table_number,
       table_seat: table_seat,
       table_zone: table_zone,
