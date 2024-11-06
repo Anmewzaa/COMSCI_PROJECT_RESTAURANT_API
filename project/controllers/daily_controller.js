@@ -97,6 +97,21 @@ exports.get_dailydata = async (req, res) => {
     });
   }
 };
+exports.get_alldailydata = async (req, res) => {
+  try {
+    DailyModel.find({}).then((data) => {
+      res.json({
+        response: data,
+        error: "",
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 exports.update_visits_dailydata = async (req, res) => {
   const { amount } = req.params;
   const startOfToday = new Date();
