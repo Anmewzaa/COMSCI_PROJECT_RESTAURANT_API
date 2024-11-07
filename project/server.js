@@ -71,6 +71,11 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   require("./routes/daily_route")
 );
+app.use(
+  "/authen/history",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/table_history_route")
+);
 
 const port = process.env.PORT;
 

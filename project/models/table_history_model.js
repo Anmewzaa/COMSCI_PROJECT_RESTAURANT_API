@@ -1,19 +1,14 @@
 const mongoose = require("mongoose");
 
 const table_history_Schema = mongoose.Schema({
-  table_number: {
-    type: String,
+  date: {
+    type: Date,
     required: true,
     unique: true,
   },
-  table_order_history: {
-    type: String,
+  table: {
+    type: [],
     required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: 2592000,
   },
 });
 
