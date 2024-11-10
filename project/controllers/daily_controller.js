@@ -99,12 +99,14 @@ exports.get_dailydata = async (req, res) => {
 };
 exports.get_alldailydata = async (req, res) => {
   try {
-    DailyModel.find({}).then((data) => {
-      res.json({
-        response: data,
-        error: "",
+    DailyModel.find({})
+      .populate("menus.menu")
+      .then((data) => {
+        res.json({
+          response: data,
+          error: "",
+        });
       });
-    });
   } catch (err) {
     res.json({
       response: [],
