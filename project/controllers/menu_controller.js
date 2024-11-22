@@ -243,23 +243,27 @@ exports.delete_menu = async (req, res) => {
 };
 exports.change_status_menu = async (req, res) => {
   try {
-    const { menu_id } = req.params;
+    const { menu_ids } = req.body;
     const { status } = req.body;
-    if (!menu_id && status) {
+    if (!menu_ids || !Array.isArray(menu_ids) || typeof status !== "boolean") {
       return res.status(400).json({
         response: "",
-        error: "input required",
+        error:
+          "Invalid input: menu_ids must be an array and status must be boolean",
       });
     }
-    await MenuModel.findOneAndUpdate(
-      { menu_id: menu_id },
-      { menu_status: status },
-      { new: true }
-    ).then(() => {
-      res.status(200).json({
-        response: [{ message: "update menu status success" }],
-        error: "",
-      });
+    const updateResult = await MenuModel.updateMany(
+      { menu_id: { $in: menu_ids } },
+      { menu_status: status }
+    );
+
+    res.status(200).json({
+      response: [
+        {
+          message: `Updated ${updateResult.modifiedCount} menu(s) successfully`,
+        },
+      ],
+      error: "",
     });
   } catch (err) {
     res.json({

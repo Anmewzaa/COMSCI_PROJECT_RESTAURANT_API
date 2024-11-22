@@ -13,7 +13,7 @@ const { upload_menu } = require("../../middlewares/multer");
 router.post("/create", upload_menu, create_menu);
 // UPDATE
 router.put("/update/:menu_id", update_menu);
-router.put("/changestatus/:menu_id", change_status_menu);
+router.put("/changestatus", change_status_menu);
 // DELETE
 router.delete("/delete/:menu_id", delete_menu);
 
