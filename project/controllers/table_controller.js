@@ -219,13 +219,7 @@ exports.add_order_table = async (req, res) => {
 exports.remove_order_table = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { id } = req.body;
-    if (!id) {
-      return res.status(400).json({
-        response: [],
-        error: `Input required`,
-      });
-    }
+    const { order_ids } = req.body;
     var _table = await TableModel.findOne({ _id: _id });
     if (_table === null) {
       return res.status(400).json({
@@ -236,13 +230,13 @@ exports.remove_order_table = async (req, res) => {
     await TableModel.findOneAndUpdate(
       { _id: _id },
       {
-        $pull: { table_order: { _id: id } },
+        $pull: { table_order: { _id: { $in: order_ids } } },
       }
-    ).then(() => {
-      res.status(200).json({
-        response: [{ message: "remove order success" }],
-        error: "",
-      });
+    );
+
+    res.status(200).json({
+      response: [{ message: "remove orders success" }],
+      error: "",
     });
   } catch (err) {
     res.json({
