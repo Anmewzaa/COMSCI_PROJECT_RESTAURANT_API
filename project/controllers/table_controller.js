@@ -280,11 +280,11 @@ exports.change_status_order_table = async (req, res) => {
 exports.check_bill = async (req, res) => {
   try {
     const { _id } = req.params;
-    var _table = await TableModel.findOne({ _id: _id });
-    if (_table === null) {
+    const _table = await TableModel.findOne({ _id: _id });
+    if (!_table) {
       return res.status(400).json({
         response: [],
-        error: `Invalid table number`,
+        error: "Invalid table number",
       });
     }
     if (_table.table_order.length === 0) {
@@ -302,11 +302,11 @@ exports.check_bill = async (req, res) => {
         table_customer_amount: "",
         table_order: [],
       }
-    ).then(() => {
-      res.status(200).json({
-        response: [{ message: "close table success" }],
-        error: "",
-      });
+    );
+
+    res.status(200).json({
+      response: [{ message: "Close table success" }],
+      error: "",
     });
   } catch (err) {
     res.json({
