@@ -9,7 +9,6 @@ const tableSchema = mongoose.Schema(
     table_id: {
       type: String,
       require: true,
-      unique: true,
     },
     table_number: {
       type: String,
