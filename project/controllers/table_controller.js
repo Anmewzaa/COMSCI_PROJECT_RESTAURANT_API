@@ -280,8 +280,8 @@ exports.change_status_order_table = async (req, res) => {
 exports.check_bill = async (req, res) => {
   try {
     const { _id } = req.params;
-    const _table = await TableModel.findOne({ _id: _id });
-    if (!_table) {
+    var _table = await TableModel.findOne({ _id: _id });
+    if (_table === null) {
       return res.status(400).json({
         response: [],
         error: "Invalid table number",
@@ -303,7 +303,6 @@ exports.check_bill = async (req, res) => {
         table_order: [],
       }
     );
-
     res.status(200).json({
       response: [{ message: "Close table success" }],
       error: "",
