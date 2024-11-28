@@ -94,7 +94,6 @@ exports.create_menu = async (req, res) => {
         menu_cost &&
         menu_price &&
         menu_category_id &&
-        menu_option_id &&
         req.file
       )
     ) {
