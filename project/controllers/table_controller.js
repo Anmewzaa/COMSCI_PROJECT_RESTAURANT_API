@@ -41,6 +41,26 @@ exports.getone_table = async (req, res) => {
     });
   }
 };
+exports.getone_admin_table = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    await TableModel.findOne({ _id: _id })
+      .populate("table_zone")
+      .populate("table_employee")
+      .populate("table_order.menu")
+      .then((data) => {
+        res.status(200).json({
+          response: data,
+          error: "",
+        });
+      });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
 
 // PROTECTED
 exports.create_table = async (req, res) => {
@@ -73,6 +93,40 @@ exports.create_table = async (req, res) => {
         response: [
           {
             message: "create table success",
+          },
+        ],
+        error: ``,
+      });
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.edit_table = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { table_number, table_seat, table_zone } = req.body;
+    if (!(table_number && table_seat && table_zone)) {
+      return res.status(400).json({
+        response: [],
+        error: `Input required`,
+      });
+    }
+    await TableModel.findOneAndUpdate(
+      { _id: _id },
+      {
+        table_number: table_number,
+        table_seat: table_seat,
+        table_zone: table_zone,
+      }
+    ).then(() => {
+      res.status(200).json({
+        response: [
+          {
+            message: "update table success",
           },
         ],
         error: ``,

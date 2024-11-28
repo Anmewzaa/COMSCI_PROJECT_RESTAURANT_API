@@ -94,8 +94,13 @@ exports.create_user = async (req, res) => {
 exports.update_user = async (req, res) => {
   try {
     const { user_id } = req.params;
-    const { c, user_nickname, user_telnum, user_role, user_access_rights } =
-      req.body;
+    const {
+      user_fullname,
+      user_nickname,
+      user_telnum,
+      user_role,
+      user_access_rights,
+    } = req.body;
     if (
       !(
         user_fullname &&

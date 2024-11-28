@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   get_table,
   create_table,
+  edit_table,
   delete_table,
   open_table,
   close_table,
@@ -17,6 +18,7 @@ router.get("/get", get_table);
 // POST
 router.post("/create", create_table);
 // PUT
+router.put("/update/:_id", edit_table);
 router.put("/open/:_id", open_table);
 router.put("/close/:_id", close_table);
 router.put("/delete/:_id", remove_order_table);

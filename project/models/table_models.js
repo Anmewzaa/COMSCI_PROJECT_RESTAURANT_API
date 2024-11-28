@@ -54,6 +54,10 @@ const tableSchema = mongoose.Schema(
             type: Number,
           },
           option: [],
+          createdAt: {
+            type: Date,
+            default: Date.now,
+          },
         },
       ],
     },
