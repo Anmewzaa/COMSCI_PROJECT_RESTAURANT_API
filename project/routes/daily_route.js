@@ -10,12 +10,14 @@ const {
   update_income_dailydata,
   update_profit_dailydata,
   update_menus_dailydata,
+  update_dailydata,
 } = require("../controllers/daily_controller");
 
 // GET
 router.get("/get", get_dailydata);
 router.get("/getall", get_alldailydata);
 // POST
+router.put("/update/dayly", update_dailydata);
 router.put("/update/visits/:amount", update_visits_dailydata);
 router.put("/update/orders/:amount", update_orders_dailydata);
 router.put("/update/tables/:amount", update_tables_dailydata);

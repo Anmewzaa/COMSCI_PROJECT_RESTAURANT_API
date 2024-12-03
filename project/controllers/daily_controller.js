@@ -245,7 +245,49 @@ exports.update_profit_dailydata = async (req, res) => {
   }
 };
 exports.update_menus_dailydata = async (req, res) => {
-  const { menu_id, amount } = req.body;
+  const { menu_id } = req.body;
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  try {
+    // Ensure menu_id is always an array
+    const menuIds = Array.isArray(menu_id) ? menu_id : [menu_id];
+
+    // Perform update for each menu ID
+    const updatePromises = menuIds.map(async (id) => {
+      // Add your specific update logic here
+      // For example:
+      // await MenuModel.findByIdAndUpdate(id, {
+      //   daily_data: {
+      //     date: startOfToday,
+      //     // other daily data properties
+      //   }
+      // });
+      return id; // Placeholder - replace with actual update operation
+    });
+
+    // Wait for all updates to complete
+    const updatedMenus = await Promise.all(updatePromises);
+
+    res.json({
+      response: updatedMenus,
+      error: "",
+    });
+  } catch (err) {
+    res.json({
+      response: [],
+      error: `${err}`,
+    });
+  }
+};
+exports.update_dailydata = async (req, res) => {
+  const {
+    visit_amount,
+    order_amount,
+    table_amount,
+    income_amount,
+    profit_amount,
+  } = req.body;
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
   try {
@@ -253,25 +295,24 @@ exports.update_menus_dailydata = async (req, res) => {
     if (!check) {
       await DailyModel.create({ date: startOfToday });
     }
-    const existingMenu = check.menus.find(
-      (item) => item.menu.toString() === menu_id
-    );
-    if (existingMenu) {
-      await DailyModel.findOneAndUpdate(
-        {
-          date: startOfToday,
-          "menus.menu": menu_id,
+    await DailyModel.findOneAndUpdate(
+      { date: startOfToday },
+      {
+        $inc: {
+          visits: visit_amount,
+          orders: order_amount,
+          tables: table_amount,
+          income: income_amount,
+          profit: profit_amount,
         },
-        { $inc: { "menus.$.amount": amount } },
-        { new: true }
-      );
-    } else {
-      await DailyModel.findOneAndUpdate(
-        { date: startOfToday },
-        { $push: { menus: { menu: menu_id, amount } } },
-        { new: true }
-      );
-    }
+      },
+      { new: true }
+    ).then((data) => {
+      res.json({
+        response: data,
+        error: "",
+      });
+    });
     res.json({
       response: ["Success"],
       error: "",
