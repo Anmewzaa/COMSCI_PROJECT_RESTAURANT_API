@@ -20,7 +20,7 @@ mongoose
   .then(() => console.log(`Connected to database successfully`))
   .catch((err) => console.log(`Error : ${err}`));
 
-// mongoose.set("debug", true);
+mongoose.set("debug", true);
 
 app.get("/", (req, res) => {
   res.json({ Message: "HELLO WORLD !" });
@@ -67,14 +67,14 @@ app.use(
   require("./routes/table_route/protecred_table")
 );
 app.use(
-  "/authen/shop",
-  passport.authenticate("jwt", { session: false }),
-  require("./routes/daily_route")
-);
-app.use(
   "/authen/history",
   passport.authenticate("jwt", { session: false }),
   require("./routes/table_history_route")
+);
+app.use(
+  "/authen/static",
+  passport.authenticate("jwt", { session: false }),
+  require("./routes/static_route")
 );
 
 const port = process.env.PORT;
